@@ -1,7 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { createStore } from 'redux';
 import App from './components/App';
+import './index.css';
+import movies from "./reducers"
+
+const store = createStore(movies);
+
+console.log("STORE", store);
+console.log("STATE", store.getState());
 
 ReactDOM.render(
   <React.StrictMode>
