@@ -10,6 +10,12 @@ const store = createStore(movies);
 console.log("STORE", store);
 console.log("STATE", store.getState());
 
+store.dispatch({
+  type: 'ADD_MOVIES',
+  movies:[{name:'SuperMan'}]
+});
+
+console.log("STATE", store.getState());
 ReactDOM.render(
   <React.StrictMode>
     <App />
