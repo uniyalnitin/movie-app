@@ -7,8 +7,6 @@ import movies from "./reducers"
 
 const store = createStore(movies);
 
-console.log("STORE", store);
-
 ReactDOM.render(
   <React.StrictMode>
     <App store = {store}/>
