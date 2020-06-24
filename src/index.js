@@ -4,8 +4,15 @@ import { createStore } from 'redux';
 import App from './components/App';
 import './index.css';
 import combineReducer from './reducers';
+import { applyMiddleware } from 'redux';
 
-const store = createStore(combineReducer); // object on which the store will work
+//(store) => (next) => (action)
+const logger = (store) => (next) => (action) => {
+  console.log("ACTION_TYPE", action.type);
+  next(action);
+} 
+
+const store = createStore(combineReducer, applyMiddleware(logger)); // object on which the store will work
 
 ReactDOM.render(
   <React.StrictMode>
