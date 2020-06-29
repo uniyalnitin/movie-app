@@ -37,10 +37,49 @@ class Provider extends React.Component{
   }
 }
 
+export function connect(callback){
+  return function(Component){
+    class ConnectedComponent extends React.Component{
+      constructor(props){
+        super(props);
+        this.unsubscribe = this.props.store.subscribe(() => {
+          this.forceUpdate();
+        });
+        // this.unsubscribe = this.props.store.subscribe();
+      }
+
+      componentWillUnmount(){
+        // this.unsubscribe();
+        console.log("hello")
+      }
+
+      render(){
+        const { store } = this.props;
+        let state = store.getState();
+        console.log('state', state.movies.list);
+        const dataToBePassedAsProps = callback(state);
+        console.log("dataToBePassed", dataToBePassedAsProps)
+        return (
+          <Component store={store} subscribe={store.subscribe} dispatch={store.dispatch} {...dataToBePassedAsProps}/>
+        );
+      }
+    }
+
+    class ConnectedComponentWrapper extends React.Component{
+      render(){
+        return <StoreContext.Consumer>
+          {store => <ConnectedComponent store={store} />}
+        </StoreContext.Consumer>
+      }
+    }
+    return ConnectedComponentWrapper;
+  }
+}
+
 ReactDOM.render(
   <React.StrictMode>
   <Provider store={store}>
-    <App store = {store}/>
+    <App />
   </Provider>
   </React.StrictMode>,
   document.getElementById('root')

@@ -3,21 +3,16 @@ import { data } from "../data";
 import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
 import { addMovies, setShowFavourites } from "../actions";
-import { StoreContext } from '../index';
+import { StoreContext, connect } from '../index';
 
 class App extends React.Component {
   componentDidMount() {
-    const { store } = this.props;
-    store.subscribe(() => {
-      this.forceUpdate();
-    });
-
-    store.dispatch(addMovies(data));
-    console.log("movies", store.getState());
+    this.props.dispatch(addMovies(data));
+    // console.log("movies", store.getState());
   }
 
   isFavouriteMovie = (movie) => {
-    const { movies } = this.props.store.getState();
+    const { movies } = this.props;
     const { favourites } = movies;
     const index = favourites.indexOf(movie);
     if (index !== -1) {
@@ -27,16 +22,17 @@ class App extends React.Component {
   };
 
   onChangeTab = (val) => {
-    this.props.store.dispatch(setShowFavourites(val));
+    this.props.dispatch(setShowFavourites(val));
   };
 
   render() {
-    const { movies, search } = this.props.store.getState(); //{ movies, search}
+    const { movies, search } = this.props; //{ movies, search}
     const { list, favourites, showFavourites } = movies;
     const displayMovies = showFavourites ? favourites : list;
+    console.log('list', list)
     return (
       <div className="App">
-        <Navbar dispatch={this.props.store.dispatch} search={search} />
+        <Navbar dispatch={this.props.dispatch} search={search} />
         <div className="main">
           <div className="tabs">
             <div
@@ -71,13 +67,13 @@ class App extends React.Component {
   }
 }
 
-class AppWrapper extends React.Component{
-  render(){
-    return (
-      <StoreContext.Consumer>
-        {(store) => <App store={store} />}
-      </StoreContext.Consumer>
-    );
+function mapStateToProps(state){
+  console.log('state', state);
+  return {
+    movies: state.movies,
+    search: state.search
   }
 }
-export default AppWrapper;
+
+const connectedAppComponent = connect(mapStateToProps)(App);
+export default connectedAppComponent;
