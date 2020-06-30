@@ -3,8 +3,7 @@ import { data } from "../data";
 import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
 import { addMovies, setShowFavourites } from "../actions";
-import { StoreContext, connect } from '../index';
-
+import { connect } from 'react-redux';
 class App extends React.Component {
   componentDidMount() {
     this.props.dispatch(addMovies(data));
@@ -54,7 +53,7 @@ class App extends React.Component {
                 movie={movie}
                 key={`movie-${index}`}
                 isFavouriteMovie={this.isFavouriteMovie(movie)}
-                dispatch={this.props.store.dispatch}
+                dispatch={this.props.dispatch}
               />
             ))}
           </div>
